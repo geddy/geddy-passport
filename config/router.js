@@ -21,11 +21,11 @@ var router = new geddy.RegExpRouter();
 
 router.get('/').to('Main.index');
 
-router.get('/auth/local').to('Main.local');
-router.get('/auth/twitter').to('Main.twitter');
-router.get('/auth/twitter/callback').to('Main.twitterCallback');
-router.get('/auth/facebook').to('Main.facebook');
-router.get('/auth/facebook/callback').to('Main.facebookCallback');
+router.get('/auth/local').to('Auth.local');
+router.get('/auth/twitter').to('Auth.twitter');
+router.get('/auth/twitter/callback').to('Auth.twitterCallback');
+router.get('/auth/facebook').to('Auth.facebook');
+router.get('/auth/facebook/callback').to('Auth.facebookCallback');
 
 // Basic routes
 // router.match('/moving/pictures/:id', 'GET').to('Moving.pictures');

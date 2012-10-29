@@ -1,25 +1,8 @@
-/*
- * Geddy JavaScript Web development framework
- * Copyright 2112 Matthew Eernisse (mde@fleegix.org)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *         http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
-*/
-
 var passport = require('passport')
   , LocalStrategy = require('passport-local').Strategy
   , TwitterStrategy = require('passport-twitter').Strategy
-  , FacebookStrategy = require('passport-facebook').Strategy;
+  , FacebookStrategy = require('passport-facebook').Strategy
+  , config;
 
 passport.use(new LocalStrategy(function(username, password, done) {
     //User.findOne({ username: username, password: password }, function (err, user) {
@@ -33,32 +16,26 @@ passport.use(new LocalStrategy(function(username, password, done) {
     }
 }));
 
-
-passport.use(new TwitterStrategy({
-consumerKey: 'NC41f9JtQwQ44Mk0EZKc2w'
-, consumerSecret: 'EW2xSsKo0NwInZhX1EKwzg1qkDY87IH6Ft57rhLWxU'
-, callbackURL: "http://localhost:4000/auth/twitter/callback"
+config = {
+  callbackURL: geddy.config.fullHostname + '/auth/twitter/callback'
 , skipExtendedUserProfile: true
-}, function(token, tokenSecret, profile, done) {
-    done(null, profile);
+};
+config = geddy.mixin(config, geddy.config.passport.twitter);
+passport.use(new TwitterStrategy(config,
+    function(token, tokenSecret, profile, done) {
+  done(null, profile);
 }));
 
-passport.use(new FacebookStrategy({
-  clientID: '133138720166664'
-, clientSecret: 'bf47b786507cc478b6554d9e73fd5de7'
-, callbackURL: "http://localhost:4000/auth/facebook/callback"
-}
-, function(accessToken, refreshToken, profile, done) {
-    done(null, profile);
+config = {
+  callbackURL: geddy.config.fullHostname + '/auth/facebook/callback'
+};
+config = geddy.mixin(config, geddy.config.passport.facebook);
+passport.use(new FacebookStrategy(config,
+    function(accessToken, refreshToken, profile, done) {
+   done(null, profile);
 }));
 
-var Main = function () {
-  this.index = function (req, resp, params) {
-    this.respond(params, {
-      format: 'html'
-    , template: 'app/views/main/index'
-    });
-  };
+var actions = new (function () {
 
   this.local = function (req, resp, params) {
     var self = this
@@ -127,8 +104,6 @@ var Main = function () {
     })(req, resp);
   };
 
-};
+})();
 
-exports.Main = Main;
-
-
+module.exports = {actions: actions};
