@@ -1,0 +1,27 @@
+{
+  "name": "geddy-passport",
+  "description": "Passport authentication for Geddy",
+  "keywords": [
+    "auth",
+    "authentication",
+    "Twitter",
+    "Facebook"
+  ],
+  "version": "0.0.1",
+  "author": "Matthew Eernisse <mde@fleegix.org> (http://fleegix.org)",
+  "dependencies": {
+    "jake": "0.5.x",
+    "passport": "0.1.x",
+    "passport-local": "0.1.x",
+    "passport-twitter": "0.1.x",
+    "passport-facebook": "0.1.x"
+  },
+  "main": "./lib/passport",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mde/geddy.git"
+  },
+  "engines": {
+    "node": "*"
+  }
+}
