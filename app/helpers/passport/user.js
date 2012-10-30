@@ -6,9 +6,51 @@ var User = geddy.model.User
           keyField: 'id'
         }
       }
-    , _findOrCreateUser = function (passport, callback) {
-        console.log(passport);
-        callback();
+    , _findOrCreateUser = function (passport, profile, callback) {
+        passport.getUser(function (err, data) {
+          var user
+            , displayName
+            , names
+            , userData;
+
+          if (err) {
+            callback(err, null);
+          }
+          else {
+            if (!data) {
+              userData = {};
+              displayName = profile.displayName;
+              if (displayName) {
+                names = displayName.split(/\S/);
+                userData.firstName = names[0];
+                if (names[1]) {
+                  userData.lastName = names[1];
+                }
+              }
+              user = User.create(userData);
+              user.save(function (err, data) {
+                if (err) {
+                  callback(err, null);
+                }
+                else {
+                  user.addPassport(passport);
+                  user.save(function (err, data) {
+                    if (err) {
+                      callback(err, null);
+                    }
+                    else {
+                      callback(null, user);
+                    }
+                  });
+                }
+              });
+            }
+            else {
+              user = data;
+              callback(null, user);
+            }
+          }
+        });
       };
 
 user = new (function () {
@@ -21,8 +63,7 @@ user = new (function () {
     passport = Passport.first({authType: authType, key: key}, function (err, data) {
       var pass;
       if (err) {
-        console.dir(err);
-        return callback(err, null);
+        callback(err, null);
       }
       else {
         if (!data) {
@@ -32,20 +73,18 @@ user = new (function () {
           });
           pass.save(function (err, data) {
             if (err) {
-              console.dir(err);
-              return callback(err, null);
+              callback(err, null);
             }
             else {
-              _findOrCreateUser(pass, callback);
+              _findOrCreateUser(pass, profile, callback);
             }
           });
         }
         else {
           pass = data;
-          _findOrCreateUser(pass, callback);
+          _findOrCreateUser(pass, profile, callback);
         }
       }
-      callback();
     });
   };
 

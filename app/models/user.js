@@ -5,7 +5,7 @@ var User = function () {
   this.property('firstName', 'string');
   this.property('email', 'string');
 
-  //this.hasMany('Passports');
+  this.hasMany('Passports');
 };
 
 User = geddy.model.register('User', User);

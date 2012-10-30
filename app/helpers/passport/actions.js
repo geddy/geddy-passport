@@ -81,16 +81,20 @@ var actions = new (function () {
       }
       else {
         try {
-          user.lookupByPassport('twitter', profile, function (id) {
-            self.respond('ok', {format: 'txt'});
+          user.lookupByPassport('twitter', profile, function (err, user) {
+            self.session.set('userId', user.id);
+            self.redirect(successRedirect);
           });
         }
         catch (e) {
-          console.dir(e.stack);
-          self.respond('not ok', {format: 'txt'});
+          self.error(e);
         }
       }
-    })(req, resp);
+    })(req, resp, function (e) {
+      if (e) {
+        self.error(e);
+      }
+    });
   };
 
   this.facebook = function (req, resp, params) {
