@@ -45,4 +45,6 @@ router.get('/auth/facebook/callback').to('Auth.facebookCallback');
 //   this.get('/print(.:format)').to('Hemispheres.print');
 // });
 
+router.resource('users');
+router.resource('passports');
 exports.router = router;

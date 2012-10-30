@@ -1,7 +1,9 @@
 var config = {
   connectCompatibility: true
 , passport: {
-    twitter: {
+    successRedirect: '/'
+  , failureRedirect: '/login'
+  , twitter: {
       consumerKey: 'NC41f9JtQwQ44Mk0EZKc2w'
     , consumerSecret: 'EW2xSsKo0NwInZhX1EKwzg1qkDY87IH6Ft57rhLWxU'
     }

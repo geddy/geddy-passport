@@ -2,10 +2,13 @@ var passport = require('passport')
   , LocalStrategy = require('passport-local').Strategy
   , TwitterStrategy = require('passport-twitter').Strategy
   , FacebookStrategy = require('passport-facebook').Strategy
-  , config;
+  , user = require('./user')
+  , config
+  , successRedirect = geddy.config.passport.successRedirect
+  , failureRedirect = geddy.config.passport.failureRedirect;
 
 passport.use(new LocalStrategy(function(username, password, done) {
-    //User.findOne({ username: username, password: password }, function (err, user) {
+    //User.findOne({username: username, password: password}, function (err, user) {
     //  done(err, user);
     //});
     if (username == 'foo' && password == 'bar') {
@@ -18,7 +21,7 @@ passport.use(new LocalStrategy(function(username, password, done) {
 
 config = {
   callbackURL: geddy.config.fullHostname + '/auth/twitter/callback'
-, skipExtendedUserProfile: true
+//, skipExtendedUserProfile: true // Want first and last name for creating User
 };
 config = geddy.mixin(config, geddy.config.passport.twitter);
 passport.use(new TwitterStrategy(config,
@@ -42,10 +45,10 @@ var actions = new (function () {
       , handler = function (badCredsError, user, noCredsError) {
           console.log(arguments);
           if (badCredsError || noCredsError) {
-            self.redirect('/bad_login');
+            self.redirect(failureRedirect);
           }
           else {
-            self.respond('ok', {format: 'txt'});
+            self.redirect(successRedirect);
           }
         };
     passport.authenticate('local', function () {
@@ -73,8 +76,20 @@ var actions = new (function () {
       resp.redirect(val);
     };
     passport.authenticate('twitter', function (err, profile) {
-      console.log(arguments);
-      self.respond('ok', {format: 'txt'});
+      if (!profile) {
+        self.redirect(failureRedirect);
+      }
+      else {
+        try {
+          user.lookupByPassport('twitter', profile, function (id) {
+            self.respond('ok', {format: 'txt'});
+          });
+        }
+        catch (e) {
+          console.dir(e.stack);
+          self.respond('not ok', {format: 'txt'});
+        }
+      }
     })(req, resp);
   };
 
@@ -106,4 +121,4 @@ var actions = new (function () {
 
 })();
 
-module.exports = {actions: actions};
+module.exports = actions;
