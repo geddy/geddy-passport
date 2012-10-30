@@ -4,7 +4,8 @@
     <h1>
       Hello<% if (user.givenName) { %>, <%= user.givenName %><% } %>
     </h1>
-    <p>You've successfully authenticated with your Geddy app (via <%= authType %>).</p>
+    <p>You've successfully logged in to this Geddy app (via <%= authType %>).</p>
+    <p><a href="/logout">Click here to log back out.</a></p>
   <% } else { %>
     <h1>Sorry</h1>
     <p>You're not authenticated with this app.</p>
