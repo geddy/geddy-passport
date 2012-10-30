@@ -70,6 +70,7 @@ var actions = new (function () {
               try {
                 user.lookupByPassport(authType, profile, function (err, user) {
                   self.session.set('userId', user.id);
+                  self.session.set('authType', authType);
                   self.redirect(successRedirect);
                 });
               }

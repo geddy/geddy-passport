@@ -1,8 +1,8 @@
 var User = function () {
   this.property('username', 'string');
   this.property('password', 'string');
-  this.property('lastName', 'string');
-  this.property('firstName', 'string');
+  this.property('familyName', 'string');
+  this.property('givenName', 'string');
   this.property('email', 'string');
 
   this.hasMany('Passports');

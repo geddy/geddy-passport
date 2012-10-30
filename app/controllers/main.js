@@ -15,6 +15,7 @@
  * limitations under the License.
  *
 */
+var authTypes = require('../helpers/passport/strategies');
 
 var Main = function () {
 
@@ -22,7 +23,34 @@ var Main = function () {
     var self = this
       , User = geddy.model.User;
     User.first(this.session.get('userId'), function (err, data) {
-      self.respond('login success: ' + data.id, {format: 'txt'});
+      var params = {
+        user: null
+      , authType: null
+      };
+      if (data) {
+        params.user = data;
+        parama.authType = authTypes[self.session.get('authType')].name;
+      }
+      self.respond(params, {
+        format: 'html'
+      , template: 'app/views/main/index'
+      });
+    });
+  };
+
+  this.login = function (req, resp, params) {
+    this.respond(params, {
+      format: 'html'
+    , template: 'app/views/main/login'
+    });
+  };
+
+  this.logout = function (req, resp, params) {
+    this.session.unset('userId');
+    this.session.unset('authType');
+    this.respond(params, {
+      format: 'html'
+    , template: 'app/views/main/logout'
     });
   };
 
