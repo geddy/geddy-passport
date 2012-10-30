@@ -1,0 +1,11 @@
+<!-- Lets talk about geddy -->
+<%- styleLink('/css/auth-buttons.css', {rel:'stylesheet'}) %>
+<div class="hero-unit geddy-welcome-box">
+
+  <h1>
+    Log In
+  </h1>
+  <a class="btn-auth btn-twitter large" href="<%= geddy.config.fullHostname %>/auth/twitter">Log in with Twitter</a>
+  &nbsp;
+  <a class="btn-auth btn-facebook large" href="<%= geddy.config.fullHostname %>/auth/facebook">Log in with Facebook</a>
+</div>

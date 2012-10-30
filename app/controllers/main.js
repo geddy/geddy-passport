@@ -29,7 +29,7 @@ var Main = function () {
       };
       if (data) {
         params.user = data;
-        parama.authType = authTypes[self.session.get('authType')].name;
+        params.authType = authTypes[self.session.get('authType')].name;
       }
       self.respond(params, {
         format: 'html'
