@@ -4,13 +4,34 @@ var User = geddy.model.User
   var _authTypes = {
         twitter: {
           keyField: 'id'
+        , parseProfile: function (profile) {
+            var userData = {}
+              , displayName = profile.displayName
+              , names;
+            if (displayName) {
+              names = displayName.split(/\S/);
+              userData.firstName = names[0];
+              if (names[1]) {
+                userData.lastName = names[1];
+              }
+            }
+            return userData;
+          }
+        }
+      , facebook: {
+          keyField: 'id'
+        , parseProfile: function (profile) {
+            var userData = {
+              firstName: profile.first_name
+            , lastName: profile.last_name
+            };
+            return userData;
+          }
         }
       }
     , _findOrCreateUser = function (passport, profile, callback) {
         passport.getUser(function (err, data) {
           var user
-            , displayName
-            , names
             , userData;
 
           if (err) {
@@ -18,15 +39,7 @@ var User = geddy.model.User
           }
           else {
             if (!data) {
-              userData = {};
-              displayName = profile.displayName;
-              if (displayName) {
-                names = displayName.split(/\S/);
-                userData.firstName = names[0];
-                if (names[1]) {
-                  userData.lastName = names[1];
-                }
-              }
+              userData = _authTypes[passport.authType].parseProfile(profile);
               user = User.create(userData);
               user.save(function (err, data) {
                 if (err) {

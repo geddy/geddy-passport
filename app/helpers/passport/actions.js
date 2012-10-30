@@ -40,6 +40,51 @@ passport.use(new FacebookStrategy(config,
 
 var actions = new (function () {
 
+  var _createInit = function (authType) {
+        return function (req, resp, params) {
+          var self = this;
+          req.session = this.session.data;
+          // FIXME: hack until Passport defers to resp.redirect
+          resp.end = function () {};
+          resp.setHeader = function (headerName, val) {
+            resp.redirect(val);
+          };
+          passport.authenticate(authType)(req, resp);
+        };
+      }
+
+    , _createCallback = function (authType) {
+        return function (req, resp, params) {
+          var self = this;
+          req.session = this.session.data;
+          // FIXME: hack until Passport defers to resp.redirect
+          resp.end = function () {};
+          resp.setHeader = function (headerName, val) {
+            resp.redirect(val);
+          };
+          passport.authenticate(authType, function (err, profile) {
+            if (!profile) {
+              self.redirect(failureRedirect);
+            }
+            else {
+              try {
+                user.lookupByPassport(authType, profile, function (err, user) {
+                  self.session.set('userId', user.id);
+                  self.redirect(successRedirect);
+                });
+              }
+              catch (e) {
+                self.error(e);
+              }
+            }
+          })(req, resp, function (e) {
+            if (e) {
+              self.error(e);
+            }
+          });
+        };
+      };
+
   this.local = function (req, resp, params) {
     var self = this
       , handler = function (badCredsError, user, noCredsError) {
@@ -56,72 +101,13 @@ var actions = new (function () {
     })(req, resp, handler);
   };
 
-  this.twitter = function (req, resp, params) {
-    var self = this;
-    req.session = this.session.data;
-    // FIXME: hack until Passport defers to resp.redirect
-    resp.end = function () {};
-    resp.setHeader = function (headerName, val) {
-      resp.redirect(val);
-    };
-    passport.authenticate('twitter')(req, resp);
-  };
+  this.twitter = _createInit('twitter');
 
-  this.twitterCallback = function (req, resp, params) {
-    var self = this;
-    req.session = this.session.data;
-    // FIXME: hack until Passport defers to resp.redirect
-    resp.end = function () {};
-    resp.setHeader = function (headerName, val) {
-      resp.redirect(val);
-    };
-    passport.authenticate('twitter', function (err, profile) {
-      if (!profile) {
-        self.redirect(failureRedirect);
-      }
-      else {
-        try {
-          user.lookupByPassport('twitter', profile, function (err, user) {
-            self.session.set('userId', user.id);
-            self.redirect(successRedirect);
-          });
-        }
-        catch (e) {
-          self.error(e);
-        }
-      }
-    })(req, resp, function (e) {
-      if (e) {
-        self.error(e);
-      }
-    });
-  };
+  this.twitterCallback = _createCallback('twitter');
 
-  this.facebook = function (req, resp, params) {
-    var self = this;
-    req.session = this.session.data;
-    // FIXME: hack until Passport defers to resp.redirect
-    resp.end = function () {};
-    resp.setHeader = function (headerName, val) {
-      console.log(val);
-      resp.redirect(val);
-    };
-    passport.authenticate('facebook')(req, resp);
-  };
+  this.facebook = _createInit('facebook');
 
-  this.facebookCallback = function (req, resp, params) {
-    var self = this;
-    req.session = this.session.data;
-    // FIXME: hack until Passport defers to resp.redirect
-    resp.end = function () {};
-    resp.setHeader = function (headerName, val) {
-      resp.redirect(val);
-    };
-    passport.authenticate('facebook', function (err, profile) {
-      console.log(arguments);
-      self.respond('ok', {format: 'txt'});
-    })(req, resp);
-  };
+  this.facebookCallback = _createCallback('facebook');
 
 })();
 
