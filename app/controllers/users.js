@@ -20,19 +20,30 @@ var Users = function () {
       , user = geddy.model.User.create(params)
       , sha;
 
-    if (user.isValid()) {
-      user.password = cryptPass(user.password);
-    }
-
-    user.save(function(err, data) {
-      if (err) {
-        params.errors = err;
+    // Non-blocking uniqueness checks are hard
+    geddy.model.User.first({username: user.username}, function(err, data) {
+      if (data) {
+        params.errors = {
+          username: 'This username is already in use.'
+        };
         self.transfer('add');
       }
       else {
-        self.redirect({controller: self.name});
+        if (user.isValid()) {
+          user.password = cryptPass(user.password);
+        }
+        user.save(function(err, data) {
+          if (err) {
+            params.errors = err;
+            self.transfer('add');
+          }
+          else {
+            self.redirect({controller: self.name});
+          }
+        });
       }
     });
+
   };
 
   this.show = function (req, resp, params) {
