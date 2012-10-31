@@ -15,6 +15,9 @@ module.exports = {
           userData.familyName = names.pop();
         }
       }
+      else {
+        userData.givenName = profile.username;
+      }
       return userData;
     }
   }
@@ -23,7 +26,7 @@ module.exports = {
   , keyField: 'id'
   , parseProfile: function (profile) {
       var userData = {
-        givenName: profile.name.givenName
+        givenName: profile.name.givenName || profile.username
       , familyName: profile.name.familyName
       };
       return userData;

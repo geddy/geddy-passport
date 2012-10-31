@@ -20,16 +20,14 @@ var config = {
   detailedErrors: false
 , hostname: null
 , port: 4000
-/*
 , model: {
     defaultAdapter: 'mongo'
 	}
 , db: {
-    postgres: {
+    mongo: {
       dbname: 'production'
     }
   }
- */
 , sessions: {
     store: 'cookie'
   , key: 'sid'

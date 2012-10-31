@@ -69,9 +69,15 @@ var actions = new (function () {
             else {
               try {
                 user.lookupByPassport(authType, profile, function (err, user) {
-                  self.session.set('userId', user.id);
-                  self.session.set('authType', authType);
-                  self.redirect(successRedirect);
+                  if (err) {
+                    console.dir(err);
+                    self.error(err);
+                  }
+                  else {
+                    self.session.set('userId', user.id);
+                    self.session.set('authType', authType);
+                    self.redirect(successRedirect);
+                  }
                 });
               }
               catch (e) {

@@ -24,6 +24,8 @@ _findOrCreateUser = function (passport, profile, callback) {
           else {
             user.addPassport(passport);
             user.save({force: true}, function (err, data) {
+            //console.dir(user);
+            //console.dir(passport);
               if (err) {
                 callback(err, null);
               }
@@ -46,7 +48,7 @@ user = new (function () {
 
   this.lookupByPassport = function (authType, profile, callback) {
     var typeData = strategies[authType]
-      , key = profile[typeData.keyField]
+      , key = String(profile[typeData.keyField]) // Important, want to use strings, not nums
       , passport;
 
     passport = Passport.first({authType: authType, key: key}, function (err, data) {
