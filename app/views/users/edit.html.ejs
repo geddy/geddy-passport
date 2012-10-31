@@ -11,7 +11,7 @@
         </ul>
       </div>
       <% } %>
-      <%= partial('_form', {user: params}); %>
+      <%= partial('_form', {user: user}); %>
       <div class="form-actions">
         <%- contentTag('input', 'Save', {type: 'submit', class: 'btn btn-primary'}) %>
         <%- contentTag('button', 'Remove', {type: 'submit', formaction: '/users/' + params.id + '?_method=DELETE', formmethod: 'POST', class: 'btn btn-danger'}) %>

@@ -1,3 +1,16 @@
+var crypto = require('crypto')
+  , _cryptPass;
+
+_cryptPass = function (cleartextPass) {
+  if (!geddy.config.secret) {
+    throw new Error('Need application secret');
+  }
+  sha = crypto.createHash('sha1');
+  sha.update(geddy.config.secret);
+  sha.update(cleartextPass);
+  return sha.digest('hex');
+};
+
 var Users = function () {
   this.respondsWith = ['html', 'json', 'xml', 'js', 'txt'];
 
@@ -15,13 +28,19 @@ var Users = function () {
 
   this.create = function (req, resp, params) {
     var self = this
-      , user = geddy.model.User.create(params);
+      , user = geddy.model.User.create(params)
+      , sha;
+
+    if (user.isValid()) {
+      user.password = _cryptPass(user.password);
+    }
 
     user.save(function(err, data) {
       if (err) {
         params.errors = err;
         self.transfer('add');
-      } else {
+      }
+      else {
         self.redirect({controller: self.name});
       }
     });
@@ -31,6 +50,7 @@ var Users = function () {
     var self = this;
 
     geddy.model.User.first(params.id, function(err, user) {
+      user.password = '';
       self.respond({params: params, user: user.toObj()});
     });
   };
@@ -47,7 +67,14 @@ var Users = function () {
     var self = this;
 
     geddy.model.User.first(params.id, function(err, user) {
-      user.updateAttributes(params);
+      // Only update password if it's changed
+      var skip = params.password ? [] : ['password'];
+
+      user.updateAttributes(params, {skip: skip});
+
+      if (params.password && user.isValid()) {
+        user.password = _cryptPass(user.password);
+      }
 
       user.save(function(err, data) {
         if (err) {
