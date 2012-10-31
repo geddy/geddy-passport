@@ -11,10 +11,11 @@
         </ul>
       </div>
       <% } %>
-    <div class="form-actions">
-      <%- contentTag('input', 'Save', {type: 'submit', class: 'btn btn-primary'}) %>
-      <%- contentTag('button', 'Remove', {type: 'submit', formaction: '/users/' + params.id + '?_method=DELETE', formmethod: 'POST', class: 'btn btn-danger'}) %>
-    </div>
+      <%= partial('_form', {user: params}); %>
+      <div class="form-actions">
+        <%- contentTag('input', 'Save', {type: 'submit', class: 'btn btn-primary'}) %>
+        <%- contentTag('button', 'Remove', {type: 'submit', formaction: '/users/' + params.id + '?_method=DELETE', formmethod: 'POST', class: 'btn btn-danger'}) %>
+      </div>
     </fieldset>
   </form>
 </div>

@@ -11,9 +11,10 @@
         </ul>
       </div>
       <% } %>
-    <div class="form-actions">
-      <%- contentTag('input', 'Add', {type: 'submit', class: 'btn btn-primary'}) %>
-    </div>
+      <%= partial('_form', {user: params}); %>
+      <div class="form-actions">
+        <%- contentTag('input', 'Add', {type: 'submit', class: 'btn btn-primary'}) %>
+      </div>
     </fieldset>
   </form>
 </div>
