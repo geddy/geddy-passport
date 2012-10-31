@@ -5,23 +5,29 @@ var passport = require('passport')
   , user = require('./user')
   , config
   , successRedirect = geddy.config.passport.successRedirect
-  , failureRedirect = geddy.config.passport.failureRedirect;
+  , failureRedirect = geddy.config.passport.failureRedirect
+  , cryptPass = require('./crypt').cryptPass;
 
 passport.use(new LocalStrategy(function(username, password, done) {
-    //User.findOne({username: username, password: password}, function (err, user) {
-    //  done(err, user);
-    //});
-    if (username == 'foo' && password == 'bar') {
-      done(null, {foo: 'bar'});
-    }
-    else {
-      done({msg: 'shit'}, null);
-    }
+    geddy.model.User.first({username: username}, function (err, user) {
+      var crypted;
+      if (err) {
+        done(err, null);
+      }
+      if (user) {
+        crypted = cryptPass(password);
+        if (user.password == crypted) {
+          done(null, user);
+        }
+        else {
+          done({message: 'Not found'}, null);
+        }
+      }
+    });
 }));
 
 config = {
   callbackURL: geddy.config.fullHostname + '/auth/twitter/callback'
-//, skipExtendedUserProfile: true // Want first and last name for creating User
 };
 config = geddy.mixin(config, geddy.config.passport.twitter);
 passport.use(new TwitterStrategy(config,
@@ -70,7 +76,6 @@ var actions = new (function () {
               try {
                 user.lookupByPassport(authType, profile, function (err, user) {
                   if (err) {
-                    console.dir(err);
                     self.error(err);
                   }
                   else {
@@ -95,14 +100,20 @@ var actions = new (function () {
   this.local = function (req, resp, params) {
     var self = this
       , handler = function (badCredsError, user, noCredsError) {
-          console.log(arguments);
           if (badCredsError || noCredsError) {
             self.redirect(failureRedirect);
           }
           else {
+            self.session.set('userId', user.id);
+            self.session.set('authType', 'local');
             self.redirect(successRedirect);
           }
         };
+    // FIXME: Passport wants a request body or query
+    req.body = {
+      username: params.username
+    , password: params.password
+    };
     passport.authenticate('local', function () {
       handler.apply(null, arguments);
     })(req, resp, handler);

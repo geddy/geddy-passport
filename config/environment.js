@@ -14,4 +14,6 @@ var config = {
   }
 };
 
+config.secret = 'km1VvA4CO0HmE9rZquuQj0RWEn93UcxYDnkFmzGIRJcCv0apEcTiwJKh7HxRVAalxaFuxui8nV42WGujGZ2549ED6XtdSU6JRFGXwdnnAWcXph7W8WJ59cEzD2re3GMk';
+
 module.exports = config;

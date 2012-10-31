@@ -15,7 +15,8 @@
  * limitations under the License.
  *
 */
-var authTypes = require('../helpers/passport/strategies');
+var strategies = require('../helpers/passport/strategies')
+  , authTypes = geddy.mixin(strategies, {local: {name: 'Local account'}});;
 
 var Main = function () {
 

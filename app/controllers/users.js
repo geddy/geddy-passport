@@ -1,15 +1,4 @@
-var crypto = require('crypto')
-  , _cryptPass;
-
-_cryptPass = function (cleartextPass) {
-  if (!geddy.config.secret) {
-    throw new Error('Need application secret');
-  }
-  sha = crypto.createHash('sha1');
-  sha.update(geddy.config.secret);
-  sha.update(cleartextPass);
-  return sha.digest('hex');
-};
+var cryptPass = require('../helpers/passport/crypt').cryptPass;
 
 var Users = function () {
   this.respondsWith = ['html', 'json', 'xml', 'js', 'txt'];
@@ -32,7 +21,7 @@ var Users = function () {
       , sha;
 
     if (user.isValid()) {
-      user.password = _cryptPass(user.password);
+      user.password = cryptPass(user.password);
     }
 
     user.save(function(err, data) {
@@ -73,7 +62,7 @@ var Users = function () {
       user.updateAttributes(params, {skip: skip});
 
       if (params.password && user.isValid()) {
-        user.password = _cryptPass(user.password);
+        user.password = cryptPass(user.password);
       }
 
       user.save(function(err, data) {
