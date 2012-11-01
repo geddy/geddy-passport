@@ -1,6 +1,15 @@
 
-var t = new jake.TestTask('foo', function () {
-  this.testFiles.include('test/*.js');
-  this.testFiles.include('test/**/*.js');
-});
+var p = new jake.NpmPublishTask('geddy-passport', [
+  'Jakefile'
+, 'README.md'
+, 'package.json'
+, 'app/**'
+, 'config/**'
+, 'lib'
+, 'log'
+, 'node_modules'
+, 'public/**'
+, 'test/**'
+]);
+
 
