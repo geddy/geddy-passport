@@ -7,7 +7,7 @@
     "Twitter",
     "Facebook"
   ],
-  "version": "0.0.1",
+  "version": "0.0.0",
   "author": "Matthew Eernisse <mde@fleegix.org> (http://fleegix.org)",
   "dependencies": {
     "jake": "0.5.x",
@@ -19,7 +19,7 @@
   "main": "./lib/passport",
   "repository": {
     "type": "git",
-    "url": "git://github.com/mde/geddy.git"
+    "url": "git://github.com/mde/geddy-passport.git"
   },
   "engines": {
     "node": "*"
