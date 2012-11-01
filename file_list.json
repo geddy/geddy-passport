@@ -19,8 +19,4 @@
 , "/app/views/users/show.html.ejs"
 , "/public/css/auth-buttons.css"
 , "/public/img/auth-icons.png"
-, "/node_modules/passport"
-, "/node_modules/passport-local"
-, "/node_modules/passport-facebook"
-, "/node_modules/passport-twitter"
 ]
