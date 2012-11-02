@@ -16,14 +16,14 @@
  *
 */
 var strategies = require('../helpers/passport/strategies')
-  , authTypes = geddy.mixin(strategies, {local: {name: 'Local account'}});;
+  , authTypes = geddy.mixin(strategies, {local: {name: 'local account'}});;
 
 var Main = function () {
 
   this.index = function (req, resp, params) {
     var self = this
       , User = geddy.model.User;
-    User.first(this.session.get('userId'), function (err, data) {
+    User.first({id: this.session.get('userId')}, function (err, data) {
       var params = {
         user: null
       , authType: null
