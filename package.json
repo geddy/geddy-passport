@@ -7,7 +7,7 @@
     "Twitter",
     "Facebook"
   ],
-  "version": "0.0.8",
+  "version": "0.0.9",
   "author": "Matthew Eernisse <mde@fleegix.org> (http://fleegix.org)",
   "dependencies": {
     "jake": "0.5.x",
