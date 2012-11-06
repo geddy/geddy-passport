@@ -6,7 +6,7 @@ var passport = require('passport')
   , config
   , successRedirect = geddy.config.passport.successRedirect
   , failureRedirect = geddy.config.passport.failureRedirect
-  , cryptPass = require('./crypt').cryptPass;
+  , cryptPass = require('./index').cryptPass;
 
 passport.use(new LocalStrategy(function(username, password, done) {
     geddy.model.User.first({username: username}, function (err, user) {
