@@ -1,6 +1,6 @@
-var passport = require('../helpers/passport');
+var passport = require('../helpers/passport')
   , cryptPass = passport.cryptPass
-  , requireAuth = passport.requireAuth
+  , requireAuth = passport.requireAuth;
 
 var Users = function () {
   this.before(requireAuth, {
