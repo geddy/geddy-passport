@@ -3,7 +3,6 @@
 , "/app/controllers/passports.js"
 , "/app/controllers/users.js"
 , "/app/helpers/passport/actions.js"
-, "/app/helpers/passport/crypt.js"
 , "/app/helpers/passport/index.js"
 , "/app/helpers/passport/strategies.js"
 , "/app/helpers/passport/user.js"
