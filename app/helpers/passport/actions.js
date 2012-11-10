@@ -6,7 +6,7 @@ var passport = require('passport')
   , config
   , successRedirect = geddy.config.passport.successRedirect
   , failureRedirect = geddy.config.passport.failureRedirect
-  , cryptPass = require('./index').cryptPass;
+  , cryptPass;
 
 passport.use(new LocalStrategy(function(username, password, done) {
     geddy.model.User.first({username: username}, function (err, user) {
@@ -15,6 +15,11 @@ passport.use(new LocalStrategy(function(username, password, done) {
         done(err, null);
       }
       if (user) {
+
+        if (!cryptPass) {
+          cryptPass = require('./index').cryptPass;
+        }
+
         crypted = cryptPass(password);
         if (user.password == crypted) {
           done(null, user);
