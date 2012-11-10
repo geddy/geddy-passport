@@ -9,6 +9,7 @@ exports.requireAuth = function () {
 };
 
 exports.cryptPass = function (cleartextPass) {
+  var sha;
   if (!geddy.config.secret) {
     throw new Error('Need application secret');
   }
