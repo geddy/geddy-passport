@@ -15,7 +15,6 @@ passport.use(new LocalStrategy(function(username, password, done) {
         done(err, null);
       }
       if (user) {
-
         if (!cryptPass) {
           cryptPass = require('./index').cryptPass;
         }
@@ -27,6 +26,9 @@ passport.use(new LocalStrategy(function(username, password, done) {
         else {
           done({message: 'Not found'}, null);
         }
+      }
+      else {
+        done({message: 'Not found'}, null);
       }
     });
 }));
