@@ -56,8 +56,14 @@ var Users = function () {
     var self = this;
 
     geddy.model.User.first(params.id, function(err, user) {
-      user.password = '';
-      self.respond({params: params, user: user.toObj()});
+      if (!user) {
+        var err = new Error();
+        err.statusCode = 400;
+        self.error(err);
+      } else {
+        user.password = '';
+        self.respond({params: params, user: user.toObj()});
+      }
     });
   };
 
@@ -65,7 +71,13 @@ var Users = function () {
     var self = this;
 
     geddy.model.User.first(params.id, function(err, user) {
-      self.respond({params: params, user: user});
+      if (!user) {
+        var err = new Error();
+        err.statusCode = 400;
+        self.error(err);
+      } else {
+        self.respond({params: params, user: user});
+      }
     });
   };
 
