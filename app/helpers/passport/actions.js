@@ -1,12 +1,15 @@
 var passport = require('passport')
   , LocalStrategy = require('passport-local').Strategy
-  , TwitterStrategy = require('passport-twitter').Strategy
-  , FacebookStrategy = require('passport-facebook').Strategy
   , user = require('./user')
-  , config
   , successRedirect = geddy.config.passport.successRedirect
   , failureRedirect = geddy.config.passport.failureRedirect
   , cryptPass;
+
+var SUPPORTED_SERVICES = [
+      'twitter'
+    , 'facebook'
+    , 'yammer'
+    ];
 
 passport.use(new LocalStrategy(function(username, password, done) {
     geddy.model.User.first({username: username}, function (err, user) {
@@ -33,25 +36,22 @@ passport.use(new LocalStrategy(function(username, password, done) {
     });
 }));
 
-config = {
-  callbackURL: geddy.config.fullHostname + '/auth/twitter/callback'
-};
-config = geddy.mixin(config, geddy.config.passport.twitter);
-passport.use(new TwitterStrategy(config,
-    function(token, tokenSecret, profile, done) {
-  done(null, profile);
-}));
+SUPPORTED_SERVICES.forEach(function (item) {
+  var config = {
+        callbackURL: geddy.config.fullHostname + '/auth/' +
+            item + '/callback'
+      }
+    , Strategy = require('passport-' + item).Strategy;
 
-config = {
-  callbackURL: geddy.config.fullHostname + '/auth/facebook/callback'
-};
-config = geddy.mixin(config, geddy.config.passport.facebook);
-passport.use(new FacebookStrategy(config,
-    function(accessToken, refreshToken, profile, done) {
-   done(null, profile);
-}));
+  geddy.mixin(config, geddy.config.passport[item]);
+  passport.use(new Strategy(config,
+      function(token, tokenSecret, profile, done) {
+    done(null, profile);
+  }));
+});
 
 var actions = new (function () {
+  var self = this;
 
   var _createInit = function (authType) {
         return function (req, resp, params) {
@@ -126,13 +126,10 @@ var actions = new (function () {
     })(req, resp, handler);
   };
 
-  this.twitter = _createInit('twitter');
-
-  this.twitterCallback = _createCallback('twitter');
-
-  this.facebook = _createInit('facebook');
-
-  this.facebookCallback = _createCallback('facebook');
+  SUPPORTED_SERVICES.forEach(function (item) {
+    self[item] = _createInit(item);
+    self[item + 'Callback'] = _createCallback(item);
+  });
 
 })();
 

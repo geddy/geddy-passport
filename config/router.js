@@ -27,6 +27,8 @@ router.get('/auth/twitter').to('Auth.twitter');
 router.get('/auth/twitter/callback').to('Auth.twitterCallback');
 router.get('/auth/facebook').to('Auth.facebook');
 router.get('/auth/facebook/callback').to('Auth.facebookCallback');
+router.get('/auth/yammer').to('Auth.yammer');
+router.get('/auth/yammer/callback').to('Auth.yammerCallback');
 
 // Basic routes
 // router.match('/moving/pictures/:id', 'GET').to('Moving.pictures');
