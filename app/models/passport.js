@@ -1,9 +1,10 @@
 var Passport = function () {
-  this.property('authType', 'string');
-  this.property('key', 'string');
+  this.defineProperties({
+    authType: {type: 'string'},
+    key: {type: 'string'}
+  });
 
   this.belongsTo('User');
 };
 
 Passport = geddy.model.register('Passport', Passport);
-

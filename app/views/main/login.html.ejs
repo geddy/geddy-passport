@@ -3,7 +3,7 @@
 <div class="hero-unit">
 
   <p>
-    <form id="login-form" class="form-horizontal" action="/auth/local" method="POST">
+    <form id="login-form" class="form-horizontal" action="<%= localPath %>" method="POST">
     <fieldset>
       <legend>Log In</legend>
       <div class="control-group">
@@ -27,12 +27,12 @@
 
   <p style="text-align: center;">
     <a class="btn-auth btn-twitter large"
-        href="<%= geddy.config.fullHostname %>/auth/twitter">
+        href="<%= geddy.config.fullHostname %><%= twitterPath %>">
       Log in with Twitter
     </a>
     &nbsp;
     <a class="btn-auth btn-facebook large"
-        href="<%= geddy.config.fullHostname %>/auth/facebook">
+        href="<%= geddy.config.fullHostname %><%= facebookPath %>">
       Log in with Facebook
     </a>
   </p>

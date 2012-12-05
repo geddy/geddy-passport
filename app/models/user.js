@@ -1,10 +1,11 @@
 var User = function () {
-
-  this.property('username', 'string', {required: true});
-  this.property('password', 'string', {required: true});
-  this.property('familyName', 'string', {required: true});
-  this.property('givenName', 'string', {required: true});
-  this.property('email', 'string', {required: true});
+  this.defineProperties({
+    username: {type: 'string', required: true},
+    password: {type: 'string', required: true},
+    familyName: {type: 'string', required: true},
+    givenName: {type: 'string', required: true},
+    email: {type: 'string', required: true}
+  });
 
   this.validatesLength('username', {min: 3});
   this.validatesLength('password', {min: 8});
@@ -14,4 +15,3 @@ var User = function () {
 };
 
 User = geddy.model.register('User', User);
-
