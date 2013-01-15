@@ -14,7 +14,8 @@
     "passport": "0.1.x",
     "passport-local": "0.1.x",
     "passport-twitter": "0.1.x",
-    "passport-facebook": "0.1.x"
+    "passport-facebook": "0.1.x",
+    "passport-yammer": "0.1.x"
   },
   "main": "./lib/passport",
   "repository": {
