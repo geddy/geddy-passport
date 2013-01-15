@@ -3,6 +3,7 @@ var passport = require('passport')
   , user = require('./user')
   , successRedirect = geddy.config.passport.successRedirect
   , failureRedirect = geddy.config.passport.failureRedirect
+  , bcrypt = require('bcrypt')
   , cryptPass;
 
 var SUPPORTED_SERVICES = [
@@ -22,8 +23,7 @@ passport.use(new LocalStrategy(function(username, password, done) {
           cryptPass = require('./index').cryptPass;
         }
 
-        crypted = cryptPass(password);
-        if (user.password == crypted) {
+        if (bcrypt.compareSync(password, user.password)) {
           done(null, user);
         }
         else {
