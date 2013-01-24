@@ -2,8 +2,13 @@ var crypto = require('crypto');
 
 exports.actions = require('./actions');
 
+// Redirect to the login page unless the user has an authenticated session.
+// Leaves open the index, login, logout (on Main), and (of course) the actual
+// authentication endpoints
 exports.requireAuth = function () {
-  if (!this.session.get('userId')) {
+  if (!(this.session.get('userId') ||
+      this.name == 'Main' ||
+      this.name == 'Auth')) {
     this.redirect('/login');
   }
 };
