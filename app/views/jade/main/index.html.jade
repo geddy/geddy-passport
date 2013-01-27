@@ -4,7 +4,7 @@
     h1
       | Hello
       - if (user.givenName)
-        = user.givenName
+        |  #{user.givenName}
     p You've successfully logged in to this Geddy app (via #{authType})
     p
       != linkTo('Click here to log back out', logoutPath)
