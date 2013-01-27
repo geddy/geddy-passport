@@ -1,0 +1,17 @@
+.hero-unit
+  h2
+    = user.id
+  != linkTo('Edit this user', editUserPath(params.id), {class: 'btn pull-right'});
+
+
+h2 User Properties
+- for(var i in user)
+  - if(i !== 'saved')
+    .row.list-item
+      .span8
+        h3= i
+  
+      .span4
+        h3
+          i.icon-list-alt
+          = user[i]

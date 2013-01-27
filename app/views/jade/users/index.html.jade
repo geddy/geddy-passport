@@ -1,0 +1,14 @@
+.hero-unit
+  h2 All Users
+  != linkTo('Create a new User', addUserPath, {class: 'btn pull-right'});
+
+- if (users)
+  - for (var i = 0, ii = users.length; i < ii; i++)
+    .row.list-item
+      .span8
+        h3
+          != linkTo(users[i].id, userPath(users[i].id))
+      .span4
+        h3
+          i.icon-list-alt
+          = users[i].id
