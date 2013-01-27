@@ -1,0 +1,12 @@
+.hero-unit
+  form(id="user-form", class="form-horizontal", action="#{usersPath}", method="POST")
+    fieldset
+      legend Create a new User
+      - if (params.errors)
+        .control-group
+          ul
+            each err in params.errors
+              li=err
+      = partial('_form', {user: params});
+      .form-actions
+        != contentTag('input', 'Add', {type: 'submit', class: 'btn btn-primary'})

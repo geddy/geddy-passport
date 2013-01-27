@@ -1,0 +1,30 @@
+// Lets talk about geddy
+!= styleLink('/css/auth-buttons.css', {rel:'stylesheet'})
+.hero-unit
+  p
+    form.form-horizontal#login-form(action="#{localPath }", method="POST")
+    fieldset
+      legend Log In
+      .control-group
+        label.control-label(for="username") username
+        .controls
+          != contentTag('input', params.username, {type:'text', class:'span6', name:'username'})
+        
+      
+      .control-group
+        label.control-label(for="password") password
+        .controls
+          != contentTag('input', params.password, {type:'password', class:'span6', name:'password'})
+        
+      
+      .form-actions
+        != contentTag('input', 'Submit', {type: 'submit', class: 'btn btn-primary'})
+
+  p(style="text-align: center;")
+    a.btn-auth.btn-twitter.large(href="#{geddy.config.fullHostname}#{twitterPath}") Log in with Twitter
+    | &nbsp;
+    a.btn-auth.btn-facebook.large(href="#{geddy.config.fullHostname}#{facebookPath}") Log in with Facebook
+
+    
+  
+
