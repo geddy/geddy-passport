@@ -1,0 +1,21 @@
+<div class="hero-unit">
+  <form id="user-form" class="form-horizontal" action="<%= userPath(params.id) %>?_method=PUT" method="POST">
+    <fieldset>
+      <legend>Update this User</legend>
+      <% if(params.errors) { %>
+      <div class="control-group">
+        <ul>
+        <% for(var err in params.errors) { %>
+          <li><%= params.errors[err]; %></li>
+        <% } %>
+        </ul>
+      </div>
+      <% } %>
+      <%= partial('_form', {user: user}); %>
+      <div class="form-actions">
+        <%- contentTag('input', 'Save', {type: 'submit', class: 'btn btn-primary'}) %>
+        <%- contentTag('button', 'Remove', {type: 'submit', formaction: userPath(params.id) + '?_method=DELETE', formmethod: 'POST', class: 'btn btn-danger'}) %>
+      </div>
+    </fieldset>
+  </form>
+</div>
