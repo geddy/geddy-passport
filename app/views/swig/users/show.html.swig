@@ -1,3 +1,5 @@
+{% extends layout %}
+{% block content %}
 <div class="hero-unit">
   <h2>{{ user.id }}</h2>
   <p><a href="{% editUserPath(params.id) %}" class="btn pull-right">Edit this user</a></p>
@@ -16,3 +18,4 @@
 </div>
 {% endif %}
 {% endfor %}
+{% endblock %}
