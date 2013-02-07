@@ -1,5 +1,5 @@
 {% extends layout %}
-
+{% block content %}
 <!-- Lets talk about geddy -->
 <div class="hero-unit geddy-welcome-box">
   {% if user %}
@@ -15,3 +15,4 @@
     <p><a href="/login">Click here to log in with Facebook or Twitter.</a></p>
   {% endif %}
 </div>
+{% endblock %}
