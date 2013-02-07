@@ -10,7 +10,6 @@
 {% for user in users %}
 <div class="row list-item">
   <div class="span8">
-    <h3><%- linkTo(users[i].id, userPath(users[i].id)); %></h3>
     <h3><a href="{% userPath(user.id) %}" class="btn pull-right">{{ user.id }}</a></h3>
   </div>
   <div class="span4">
