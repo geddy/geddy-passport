@@ -5,7 +5,7 @@
 <div class="hero-unit">
 
   <p>
-    <form id="login-form" class="form-horizontal" action="<%= localPath %>" method="POST">
+    <form id="login-form" class="form-horizontal" action="{{ localPath }}" method="POST">
     <fieldset>
       <legend>Log In</legend>
       <div class="control-group">
