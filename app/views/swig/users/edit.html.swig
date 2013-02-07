@@ -2,19 +2,19 @@
   <form id="user-form" class="form-horizontal" action="<%= userPath(params.id) %>?_method=PUT" method="POST">
     <fieldset>
       <legend>Update this User</legend>
-      <% if(params.errors) { %>
+      {% if params.errors %}
       <div class="control-group">
         <ul>
-        <% for(var err in params.errors) { %>
-          <li><%= params.errors[err]; %></li>
-        <% } %>
+        {% for err in params.errors %}
+          <li>{{ err }}</li>
+        {% endfor %}
         </ul>
       </div>
-      <% } %>
-      <%= partial('_form', {user: user}); %>
+      {% endif %}
+      {% include "_form.html.swig" %}
       <div class="form-actions">
-        <%- contentTag('input', 'Save', {type: 'submit', class: 'btn btn-primary'}) %>
-        <%- contentTag('button', 'Remove', {type: 'submit', formaction: userPath(params.id) + '?_method=DELETE', formmethod: 'POST', class: 'btn btn-danger'}) %>
+        <input type="submit" class="btn btn-primary" name="email" val="Save" />
+        <input type="submit" class="btn btn-danger" value="Delete" formaction="{% userPath(params.id) %}?_method=DELETE" />
       </div>
     </fieldset>
   </form>

@@ -1,4 +1,4 @@
-{% extends '../layouts/layout.swig' %}
+{% extends layout %}
 
 <!-- Lets talk about geddy -->
 <div class="hero-unit geddy-welcome-box">
@@ -7,7 +7,6 @@
       Hello{% if user.givenName %}, {{ user.givenName }} {% endif %}
     </h1>
     <p>You've successfully logged in to this Geddy app (via {{ authType }}).</p>
-    <p><%- linkTo('Click here to log back out', logoutPath) %></p>
     <p><a href="/logout">Click here to log back out</a></p>
   {% else %}
     <h1>Hello, stranger</h1>

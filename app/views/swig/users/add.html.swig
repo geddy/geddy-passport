@@ -2,18 +2,18 @@
   <form id="user-form" class="form-horizontal" action="<%= usersPath %>" method="POST">
     <fieldset>
       <legend>Create a new User</legend>
-      <% if(params.errors) { %>
+      {% if params.errors %}
       <div class="control-group">
         <ul>
-        <% for(var err in params.errors) { %>
-          <li><%= params.errors[err]; %></li>
-        <% } %>
+        {% for err in params.errors %}
+          <li>{{ err }}</li>
+        {% endfor %}
         </ul>
       </div>
-      <% } %>
-      <%= partial('_form', {user: params}); %>
+      {% endif %}
+      {% include "_form.html.swig" %}
       <div class="form-actions">
-        <%- contentTag('input', 'Add', {type: 'submit', class: 'btn btn-primary'}) %>
+        <input type="submit" class="btn btn-primary" name="email" val="Add" />
       </div>
     </fieldset>
   </form>
