@@ -21,7 +21,6 @@
         </div>
       </div>
       <div class="form-actions">
-        <%- contentTag('input', 'Submit', {type: 'submit', class: 'btn btn-primary'}) %>
         <input type="submit" class="btn btn-primary" val="Submit" />
       </div>
     </fieldset>
