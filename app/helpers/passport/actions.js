@@ -10,6 +10,7 @@ var SUPPORTED_SERVICES = [
       'twitter'
     , 'facebook'
     , 'yammer'
+    , 'google'
     ];
 
 passport.use(new LocalStrategy(function(username, password, done) {
@@ -41,13 +42,19 @@ SUPPORTED_SERVICES.forEach(function (item) {
         callbackURL: geddy.config.fullHostname + '/auth/' +
             item + '/callback'
       }
-    , Strategy = require('passport-' + item).Strategy;
+    , Strategy = require('passport-' + item).Strategy
+    , verifyCallback = function(token, tokenSecret, profile, done) {
+      done(null, profile);
+    };
 
   geddy.mixin(config, geddy.config.passport[item]);
-  passport.use(new Strategy(config,
-      function(token, tokenSecret, profile, done) {
-    done(null, profile);
-  }));
+
+  if(item=='google'){
+     verifyCallback = function(identity,  profile, done) {
+      done(null, profile);
+    };
+  }
+  passport.use(new Strategy(config, verifyCallback));  
 });
 
 var actions = new (function () {

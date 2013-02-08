@@ -43,5 +43,15 @@ module.exports = {
       return userData;
     }
   }
+, google: {
+    name: 'Google'
+  , keyField: 'id'
+  , parseProfile: function (profile) {
+      var userData = {
+        givenName: profile.name.givenName 
+      , familyName: profile.name.familyName 
+      };
+      return userData;
+  }  
 };
 
