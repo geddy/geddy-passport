@@ -35,5 +35,10 @@
         href="{{ geddy.config.fullHostname }}{{ facebookPath }}%>">
       Log in with Facebook
     </a>
+    &nbsp;
+    <a class="btn-auth btn-google large"
+        href="{{ geddy.config.fullHostname }}{{ googlePath }}%>">
+      Log in with Google
+    </a>
   </p>
 </div>

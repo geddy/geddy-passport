@@ -13,6 +13,6 @@
     <h1>Hello, stranger</h1>
     <p>You're not authenticated with this app.</p>
     <p>{{{ linkTo 'Click here to create a user account.' addUserPath }}}</p>
-    <p>{{{ linkTo 'Click here to log in with Facebook or Twitter.' loginPath }}}</p>
+    <p>{{{ linkTo 'Click here to log in with Facebook, Twitter or Google.' loginPath }}}</p>
   {{/if}}
 </div>
