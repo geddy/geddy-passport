@@ -10,6 +10,7 @@ var SUPPORTED_SERVICES = [
       'twitter'
     , 'facebook'
     , 'yammer'
+    , 'google'
     ];
 
 SUPPORTED_SERVICES.forEach(function (item) {
@@ -19,6 +20,7 @@ SUPPORTED_SERVICES.forEach(function (item) {
             item + '/callback'
       }
     , Strategy = require('passport-' + item).Strategy
+<<<<<<< HEAD
     , handler = function(token, tokenSecret, profile, done) {
         // Pass along auth data so auth'd users can make
         // API calls to the third-party service
@@ -34,6 +36,20 @@ SUPPORTED_SERVICES.forEach(function (item) {
 
   geddy.mixin(config, geddy.config.passport[item]);
   passport.use(new Strategy(config, handler));
+=======
+    , verifyCallback = function(token, tokenSecret, profile, done) {
+      done(null, profile);
+    };
+
+  geddy.mixin(config, geddy.config.passport[item]);
+
+  if(item=='google'){
+     verifyCallback = function(identity,  profile, done) {
+      done(null, profile);
+    };
+  }
+  passport.use(new Strategy(config, verifyCallback));  
+>>>>>>> 8963f77... Add google login
 });
 
 var actions = new (function () {

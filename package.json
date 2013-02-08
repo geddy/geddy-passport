@@ -15,6 +15,7 @@
     "passport-twitter": "0.1.x",
     "passport-facebook": "0.1.x",
     "passport-yammer": "0.1.x",
+    "passport-google": "0.2.x",
     "bcrypt": "0.7.x"
   },
   "main": "./lib/passport",
