@@ -6,7 +6,6 @@
 </div>
 
 {% if users %}
-<% for (var i = 0, ii = users.length; i < ii; i++) { %>
 {% for user in users %}
 <div class="row list-item">
   <div class="span8">
