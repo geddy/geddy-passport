@@ -1,0 +1,13 @@
+.hero-unit
+  form(id="user-form", class="form-horizontal", action="#{userPath(params.id)}?_method=PUT", method="POST")
+    fieldset
+      legend Update this User
+      - if(params.errors)
+        .control-group
+          ul
+            each err in params.errors
+              li=err
+      = partial('_form', {user: user});
+      .form-actions
+        != contentTag('input', 'Save', {type: 'submit', class: 'btn btn-primary'})
+        != contentTag('button', 'Remove', {type: 'submit', formaction: userPath(params.id) + '?_method=DELETE', formmethod: 'POST', class: 'btn btn-danger'})

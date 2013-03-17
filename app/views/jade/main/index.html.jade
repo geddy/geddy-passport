@@ -1,0 +1,17 @@
+// Lets talk about geddy
+.hero-unit.geddy-welcome-box
+  - if (user)
+    h1
+      | Hello
+      - if (user.givenName)
+        |  #{user.givenName}
+    p You've successfully logged in to this Geddy app (via #{authType})
+    p
+      != linkTo('Click here to log back out', logoutPath)
+  - else
+    h1 Hello, stranger
+    p You're not authenticated with this app.
+    p
+      != linkTo('Click here to create a user account.', addUserPath)
+    p
+      != linkTo('Click here to log in with Facebook or Twitter.', loginPath)

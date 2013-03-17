@@ -1,0 +1,24 @@
+.control-group
+  label(for="username", class="control-label") username
+  .controls
+    != contentTag('input', user.username, {type:'text', class:'span6', name:'username'})
+.control-group
+  label(for="password", class="control-label") password
+  .controls
+    != contentTag('input', user.password, {type:'password', class:'span6', name:'password'})
+.control-group
+  label(for="confirmPassword", class="control-label") confirmPassword
+  .controls
+    != contentTag('input', user.confirmPassword, {type:'password', class:'span6', name:'confirmPassword'})
+.control-group
+  label(for="familyName", class="control-label") familyName
+  .controls
+    != contentTag('input', user.familyName, {type:'text', class:'span6', name:'familyName'})
+.control-group
+  label(for="givenName", class="control-label") givenName
+  .controls
+    != contentTag('input', user.givenName, {type:'text', class:'span6', name:'givenName'})
+.control-group
+  label(for="email", class="control-label") email
+  .controls
+    != contentTag('input', user.email, {type:'text', class:'span6', name:'email'})
