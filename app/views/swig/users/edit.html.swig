@@ -15,10 +15,10 @@
       {% endif %}
       {% set formPath = [process.cwd(), 'app/views/users/_form.html.swig'] %}
       {% set formPath = formPath|join('/') %}
-      {% include formPath %}
+      {% include formPath with user %}
       <div class="form-actions">
         <input type="submit" class="btn btn-primary" name="email" val="Save" />
-        <input type="submit" class="btn btn-danger" value="Delete" formaction="{% userPath(params.id) %}?_method=DELETE" />
+        <input type="submit" class="btn btn-danger" value="Delete" formaction="{{ userPath(params.id) }}?_method=DELETE" />
       </div>
     </fieldset>
   </form>

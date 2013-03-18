@@ -2,7 +2,7 @@
 {% block content %}
 <div class="hero-unit">
   <h2>{{ user.id }}</h2>
-  <p><a href="{% editUserPath(params.id) %}" class="btn pull-right">Edit this user</a></p>
+  <p><a href="{{ editUserPath(params.id) }}" class="btn pull-right">Edit this user</a></p>
 </div>
 
 <h2>User Properties</h2>
