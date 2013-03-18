@@ -12,7 +12,7 @@
     <h3><a href="{% userPath(user.id) %}" class="btn pull-right">{{ user.id }}</a></h3>
   </div>
   <div class="span4">
-    <h3><i class="icon-list-alt"></i>{% user.id %}</h3>
+    <h3><i class="icon-list-alt"></i>{{ user.id }}</h3>
   </div>
 </div>
 {% endfor %}
