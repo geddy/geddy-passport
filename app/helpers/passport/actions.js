@@ -13,8 +13,9 @@ var SUPPORTED_SERVICES = [
     ];
 
 SUPPORTED_SERVICES.forEach(function (item) {
-  var config = {
-        callbackURL: geddy.config.fullHostname + '/auth/' +
+  var hostname = geddy.config.fullHostname || ''
+    , config = {
+        callbackURL: hostname + '/auth/' +
             item + '/callback'
       }
     , Strategy = require('passport-' + item).Strategy;
@@ -33,11 +34,6 @@ var actions = new (function () {
         return function (req, resp, params) {
           var self = this;
           req.session = this.session.data;
-          // FIXME: hack until Passport defers to resp.redirect
-          resp.end = function () {};
-          resp.setHeader = function (headerName, val) {
-            resp.redirect(val);
-          };
           passport.authenticate(authType)(req, resp);
         };
       }
@@ -46,11 +42,6 @@ var actions = new (function () {
         return function (req, resp, params) {
           var self = this;
           req.session = this.session.data;
-          // FIXME: hack until Passport defers to resp.redirect
-          resp.end = function () {};
-          resp.setHeader = function (headerName, val) {
-            resp.redirect(val);
-          };
           passport.authenticate(authType, function (err, profile) {
             if (!profile) {
               self.redirect(failureRedirect);
