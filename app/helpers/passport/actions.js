@@ -2,7 +2,7 @@ var passport = require('passport')
   , user = require('./user')
   , config = geddy.config.passport
   , successRedirect = config.successRedirect
-  , failureRedirect = config.failureredirect
+  , failureRedirect = config.failureRedirect
   , bcrypt = require('bcrypt')
   , cryptPass;
 
