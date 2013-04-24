@@ -1,8 +1,8 @@
 var passport = require('passport')
-  , LocalStrategy = require('passport-local').Strategy
   , user = require('./user')
-  , successRedirect = geddy.config.passport.successRedirect
-  , failureRedirect = geddy.config.passport.failureRedirect
+  , config = geddy.config.passport
+  , successRedirect = config.successRedirect
+  , failureRedirect = config.failureRedirect
   , bcrypt = require('bcrypt')
   , cryptPass;
 
@@ -12,33 +12,10 @@ var SUPPORTED_SERVICES = [
     , 'yammer'
     ];
 
-passport.use(new LocalStrategy(function(username, password, done) {
-    geddy.model.User.first({username: username}, function (err, user) {
-      var crypted;
-      if (err) {
-        done(err, null);
-      }
-      if (user) {
-        if (!cryptPass) {
-          cryptPass = require('./index').cryptPass;
-        }
-
-        if (bcrypt.compareSync(password, user.password)) {
-          done(null, user);
-        }
-        else {
-          done({message: 'Not found'}, null);
-        }
-      }
-      else {
-        done({message: 'Not found'}, null);
-      }
-    });
-}));
-
 SUPPORTED_SERVICES.forEach(function (item) {
-  var config = {
-        callbackURL: geddy.config.fullHostname + '/auth/' +
+  var hostname = geddy.config.fullHostname || ''
+    , config = {
+        callbackURL: hostname + '/auth/' +
             item + '/callback'
       }
     , Strategy = require('passport-' + item).Strategy;
@@ -57,11 +34,6 @@ var actions = new (function () {
         return function (req, resp, params) {
           var self = this;
           req.session = this.session.data;
-          // FIXME: hack until Passport defers to resp.redirect
-          resp.end = function () {};
-          resp.setHeader = function (headerName, val) {
-            resp.redirect(val);
-          };
           passport.authenticate(authType)(req, resp);
         };
       }
@@ -70,11 +42,6 @@ var actions = new (function () {
         return function (req, resp, params) {
           var self = this;
           req.session = this.session.data;
-          // FIXME: hack until Passport defers to resp.redirect
-          resp.end = function () {};
-          resp.setHeader = function (headerName, val) {
-            resp.redirect(val);
-          };
           passport.authenticate(authType, function (err, profile) {
             if (!profile) {
               self.redirect(failureRedirect);
@@ -106,24 +73,33 @@ var actions = new (function () {
 
   this.local = function (req, resp, params) {
     var self = this
-      , handler = function (badCredsError, user, noCredsError) {
-          if (badCredsError || noCredsError) {
-            self.redirect(failureRedirect);
-          }
-          else {
-            self.session.set('userId', user.id);
-            self.session.set('authType', 'local');
-            self.redirect(successRedirect);
-          }
-        };
-    // FIXME: Passport wants a request body or query
-    req.body = {
-      username: params.username
-    , password: params.password
-    };
-    passport.authenticate('local', function () {
-      handler.apply(null, arguments);
-    })(req, resp, handler);
+      , username = params.username
+      , password = params.password;
+
+    geddy.model.User.first({username: username}, {nocase: ['username']},
+        function (err, user) {
+      var crypted;
+      if (err) {
+        self.redirect(failureRedirect);
+      }
+      if (user) {
+        if (!cryptPass) {
+          cryptPass = require('./index').cryptPass;
+        }
+
+        if (bcrypt.compareSync(password, user.password)) {
+          self.session.set('userId', user.id);
+          self.session.set('authType', 'local');
+          self.redirect(successRedirect);
+        }
+        else {
+          self.redirect(failureRedirect);
+        }
+      }
+      else {
+        self.redirect(failureRedirect);
+      }
+    });
   };
 
   SUPPORTED_SERVICES.forEach(function (item) {
