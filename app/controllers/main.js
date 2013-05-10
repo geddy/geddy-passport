@@ -23,16 +23,16 @@ var Main = function () {
   this.index = function (req, resp, params) {
     var self = this
       , User = geddy.model.User;
-    User.first({id: this.session.get('userId')}, function (err, data) {
-      var params = {
+    User.first({id: this.session.get('userId')}, function (err, user) {
+      var data = {
         user: null
       , authType: null
       };
-      if (data) {
-        params.user = data;
-        params.authType = authTypes[self.session.get('authType')].name;
+      if (user) {
+        data.user = user;
+        data.authType = authTypes[self.session.get('authType')].name;
       }
-      self.respond(params, {
+      self.respond(data, {
         format: 'html'
       , template: 'app/views/main/index'
       });

@@ -18,13 +18,22 @@ SUPPORTED_SERVICES.forEach(function (item) {
         callbackURL: hostname + '/auth/' +
             item + '/callback'
       }
-    , Strategy = require('passport-' + item).Strategy;
+    , Strategy = require('passport-' + item).Strategy
+    , handler = function(token, tokenSecret, profile, done) {
+        // Pass along auth data so auth'd users can make
+        // API calls to the third-party service
+        var authData = {
+          token: token
+        };
+        if (tokenSecret) {
+          authData.tokenSecret = tokenSecret;
+        }
+        profile.authData = authData;
+        done(null, profile);
+      };
 
   geddy.mixin(config, geddy.config.passport[item]);
-  passport.use(new Strategy(config,
-      function(token, tokenSecret, profile, done) {
-    done(null, profile);
-  }));
+  passport.use(new Strategy(config, handler));
 });
 
 var actions = new (function () {
@@ -40,34 +49,41 @@ var actions = new (function () {
 
     , _createCallback = function (authType) {
         return function (req, resp, params) {
-          var self = this;
+          var self = this
+            , handler = function (err, profile) {
+                if (!profile) {
+                  self.redirect(failureRedirect);
+                }
+                else {
+                  try {
+                    user.lookupByPassport(authType, profile, function (err, user) {
+                      if (err) {
+                        self.error(err);
+                      }
+                      else {
+                        // Local account's userId
+                        self.session.set('userId', user.id);
+                        // Third-party auth type, e.g. 'facebook'
+                        self.session.set('authType', authType);
+                        // Third-party auth tokens, may include 'token', 'tokenSecret'
+                        self.session.set('authData', profile.authData);
+
+                        self.redirect(successRedirect);
+                      }
+                    });
+                  }
+                  catch (e) {
+                    self.error(e);
+                  }
+                }
+              }
+            , next = function (e) {
+                if (e) {
+                  self.error(e);
+                }
+              };
           req.session = this.session.data;
-          passport.authenticate(authType, function (err, profile) {
-            if (!profile) {
-              self.redirect(failureRedirect);
-            }
-            else {
-              try {
-                user.lookupByPassport(authType, profile, function (err, user) {
-                  if (err) {
-                    self.error(err);
-                  }
-                  else {
-                    self.session.set('userId', user.id);
-                    self.session.set('authType', authType);
-                    self.redirect(successRedirect);
-                  }
-                });
-              }
-              catch (e) {
-                self.error(e);
-              }
-            }
-          })(req, resp, function (e) {
-            if (e) {
-              self.error(e);
-            }
-          });
+          passport.authenticate(authType, handler)(req, resp, next);
         };
       };
 
@@ -90,6 +106,9 @@ var actions = new (function () {
         if (bcrypt.compareSync(password, user.password)) {
           self.session.set('userId', user.id);
           self.session.set('authType', 'local');
+          // No third-party auth tokens
+          self.session.set('authData', {});
+
           self.redirect(successRedirect);
         }
         else {
