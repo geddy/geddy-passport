@@ -1,5 +1,3 @@
-{% extends layout %}
-{% block content %}
 <!-- Lets talk about geddy -->
 <link rel="stylesheet" href="/css/auth-buttons.css" rel="stylesheet" />
 <div class="hero-unit">
@@ -39,4 +37,3 @@
     </a>
   </p>
 </div>
-{% endblock %}

@@ -1,5 +1,3 @@
-{% extends layout %}
-{% block content %}
 <div class="hero-unit">
   <form id="user-form" class="form-horizontal" action="{{ usersPath }}" method="POST">
     <fieldset>
@@ -22,4 +20,3 @@
     </fieldset>
   </form>
 </div>
-{% endblock %}

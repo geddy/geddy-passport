@@ -1,5 +1,3 @@
-{% extends layout %}
-{% block content %}
 <div class="hero-unit">
   <h2>All Users</h2>
   <p><a href="{{ addUserPath }}" class="btn pull-right">Create a new User</a></p>
@@ -17,4 +15,3 @@
 </div>
 {% endfor %}
 {% endif %}
-{% endblock %}
