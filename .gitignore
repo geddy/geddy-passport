@@ -5,3 +5,7 @@ node_modules
 *.DS_Store
 .log
 npm-debug.log
+config/secrets.json
+log
+public/js/core
+app/views
