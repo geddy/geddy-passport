@@ -8,4 +8,4 @@ npm-debug.log
 config/secrets.json
 log
 app/views
-
+public/js/core
