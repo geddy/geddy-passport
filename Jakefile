@@ -6,11 +6,6 @@ var p = new jake.NpmPublishTask('geddy-passport', [
 , 'file_list.json'
 , 'app/**'
 , 'config/**'
-, 'lib'
-, 'log'
-, 'node_modules'
-, 'public/**'
-, 'test/**'
 ]);
 
 
