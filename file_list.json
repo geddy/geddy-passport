@@ -18,4 +18,6 @@
 , "/app/views/users/show.html[.ext]"
 , "/public/css/auth-buttons.css"
 , "/public/img/auth-icons.png"
+, "/db//migrations/00000000000001_create_users.js"
+, "/db//migrations/00000000000001_create_users.js"
 ]
