@@ -8,6 +8,7 @@ var p = new jake.NpmPublishTask('geddy-passport', [
 , 'db/**'
 , 'public/css/auth-buttons.css'
 , 'public/img/auth-icons.png'
+, 'config/secrets.json.template'
 ]);
 
 
