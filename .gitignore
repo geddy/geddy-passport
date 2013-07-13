@@ -7,5 +7,5 @@ node_modules
 npm-debug.log
 config/secrets.json
 log
-public/js/core
 app/views
+
