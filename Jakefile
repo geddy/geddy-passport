@@ -5,7 +5,8 @@ var p = new jake.NpmPublishTask('geddy-passport', [
 , 'package.json'
 , 'file_list.json'
 , 'app/**'
-, 'config/**'
+, 'public/css/auth-buttons.css'
+, 'public/img/auth-icons.png'
 ]);
 
 
