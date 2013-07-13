@@ -19,5 +19,5 @@
 , "public/css/auth-buttons.css"
 , "public/img/auth-icons.png"
 , "db//migrations/00000000000001_create_users.js"
-, "db//migrations/00000000000001_create_users.js"
+, "db//migrations/00000000000002_create_passports.js"
 ]
