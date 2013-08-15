@@ -57,10 +57,22 @@ var actions = new (function () {
                 else {
                   try {
                     user.lookupByPassport(authType, profile, function (err, user) {
+                      var redirect = self.session.get('successRedirect');
                       if (err) {
                         self.error(err);
                       }
                       else {
+                        // If there was a session var for an previous attempt
+                        // to hit an auth-protected page, redirect there, and
+                        // remove the session var so they don't keep going to
+                        // that page for infinity
+                        if (redirect) {
+                          self.session.unset('successRedirect');
+                        }
+                        // Otherwise use the default redirect
+                        else {
+                          redirect = successRedirect;
+                        }
                         // Local account's userId
                         self.session.set('userId', user.id);
                         // Third-party auth type, e.g. 'facebook'
@@ -68,7 +80,7 @@ var actions = new (function () {
                         // Third-party auth tokens, may include 'token', 'tokenSecret'
                         self.session.set('authData', profile.authData);
 
-                        self.redirect(successRedirect);
+                        self.redirect(redirect);
                       }
                     });
                   }
@@ -94,7 +106,8 @@ var actions = new (function () {
 
     geddy.model.User.first({username: username}, {nocase: ['username']},
         function (err, user) {
-      var crypted;
+      var crypted
+        , redirect;
       if (err) {
         self.redirect(failureRedirect);
       }
@@ -104,12 +117,26 @@ var actions = new (function () {
         }
 
         if (bcrypt.compareSync(password, user.password)) {
+          redirect = self.session.get('successRedirect');
+
+          // If there was a session var for an previous attempt
+          // to hit an auth-protected page, redirect there, and
+          // remove the session var so they don't keep going to
+          // that page for infinity
+          if (redirect) {
+            self.session.unset('successRedirect');
+          }
+          // Otherwise use the default redirect
+          else {
+            redirect = successRedirect;
+          }
+
           self.session.set('userId', user.id);
           self.session.set('authType', 'local');
           // No third-party auth tokens
           self.session.set('authData', {});
 
-          self.redirect(successRedirect);
+          self.redirect(redirect);
         }
         else {
           self.redirect(failureRedirect);
