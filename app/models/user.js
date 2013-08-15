@@ -14,4 +14,5 @@ var User = function () {
   this.hasMany('Passports');
 };
 
-User = geddy.model.register('User', User);
+exports.User = User;
+
