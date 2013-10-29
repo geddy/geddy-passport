@@ -7,5 +7,5 @@ var Passport = function () {
   this.belongsTo('User');
 };
 
-exports.Passport = Passport;
+Passport = geddy.model.register('Passport', Passport);
 
