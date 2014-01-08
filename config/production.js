@@ -21,13 +21,8 @@ var config = {
 , hostname: null
 , port: 4000
 , model: {
-    defaultAdapter: 'mongo'
+    defaultAdapter: 'filesystem'
 	}
-, db: {
-    mongo: {
-      dbname: 'production'
-    }
-  }
 , sessions: {
     store: 'cookie'
   , key: 'sid'
