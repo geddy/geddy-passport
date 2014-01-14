@@ -13,11 +13,12 @@ exports.requireAuth = function () {
     // Record the page the user was trying to get to, will
     // try to return them there after login
     this.session.set('successRedirect', this.request.url);
+    this.flash.keep('success');
     this.redirect('/login');
   }
 };
 
-exports.cryptPass = function (cleartextPass) {
+exports.generateHash = function (cleartextPass) {
   if (!geddy.config.secret) {
     throw new Error('Need application secret');
   }

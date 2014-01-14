@@ -19,15 +19,21 @@
 var config = {
   detailedErrors: true
 , debug: true
-, hostname: null
+, hostname: 'localhost'
 , port: 4000
 , model: {
     defaultAdapter: 'memory'
 	}
 , sessions: {
-    store: 'memory'
+    store: 'filesystem'
+  , filename: '_session_store.json'
   , key: 'sid'
   , expiry: 14 * 24 * 60 * 60
+  }
+, mailer: {
+    direct: {
+      debug: true
+    }
   }
 };
 

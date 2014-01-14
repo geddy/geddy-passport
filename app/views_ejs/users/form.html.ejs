@@ -11,6 +11,12 @@
   </div>
 </div>
 <div class="control-group">
+  <label for="confirmPpassword" class="control-label">confirm password</label>
+  <div class="controls">
+    <%- contentTag('input', '', {type:'password', class:'span6', name:'confirmPassword'}) %>
+  </div>
+</div>
+<div class="control-group">
   <label for="givenName" class="control-label">givenName</label>
   <div class="controls">
     <%- contentTag('input', user.givenName, {type:'text', class:'span6', name:'givenName'}) %>

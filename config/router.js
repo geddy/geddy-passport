@@ -30,24 +30,7 @@ router.get('/auth/facebook/callback').to('Auth.facebookCallback');
 router.get('/auth/yammer').to('Auth.yammer');
 router.get('/auth/yammer/callback').to('Auth.yammerCallback');
 
-// Basic routes
-// router.match('/moving/pictures/:id', 'GET').to('Moving.pictures');
-//
-// router.match('/farewells/:farewelltype/kings/:kingid', 'GET').to('Farewells.kings');
-//
-// Can also match specific HTTP methods only
-// router.get('/xandadu').to('Xanadu.specialHandler');
-// router.del('/xandadu/:id').to('Xanadu.killItWithFire');
-//
-// Resource-based routes
-// router.resource('hemispheres');
-//
-// Nested Resource-based routes
-// router.resource('hemispheres', function(){
-//   this.resource('countries');
-//   this.get('/print(.:format)').to('Hemispheres.print');
-// });
-
+router.get('/users/activate').to('Users.activate');
 router.resource('users');
 router.resource('passports');
 exports.router = router;

@@ -1,10 +1,30 @@
 var passport = require('../helpers/passport')
-  , cryptPass = passport.cryptPass
+  , generateHash = passport.generateHash
   , requireAuth = passport.requireAuth;
 
+
 var Users = function () {
+
+  // Set this to false if you don't need e-mail activation
+  // for local users
+  var EMAIL_ACTIVATION = true
+    , msg;
+
+  if (EMAIL_ACTIVATION) {
+    if (!geddy.mailer) {
+      msg = 'E-mail activation requires a mailer. ' +
+          'Please configure a mailer for your app.';
+      throw new Error(msg);
+    }
+    if (!geddy.config.fullHostname) {
+      msg = 'E-mail activation requires a hostname for the ' +
+          'activation URL. Please set "hostname" in your app config.';
+      throw new Error(msg);
+    }
+  }
+
   this.before(requireAuth, {
-    except: ['add', 'create']
+    except: ['add', 'create', 'activate']
   });
 
   this.respondsWith = ['html', 'json', 'xml', 'js', 'txt'];
@@ -28,7 +48,8 @@ var Users = function () {
 
     // Non-blocking uniqueness checks are hard
     geddy.model.User.first({username: user.username}, function(err, data) {
-      var conflictErr;
+      var conflictErr
+        , activationUrl;
       if (err) {
         throw err;
       }
@@ -40,14 +61,54 @@ var Users = function () {
       }
       else {
         if (user.isValid()) {
-          user.password = cryptPass(user.password);
+          user.password = generateHash(user.password);
+
+          if (EMAIL_ACTIVATION) {
+            user.activationToken = generateHash(user.email);
+          }
+          else {
+            user.activatedAt = new Date();
+          }
+          user.save(function(err, data) {
+            var options = {};
+            if (err) {
+              throw err;
+            }
+
+            if (EMAIL_ACTIVATION) {
+
+            activationUrl = geddy.config.fullHostname + '/users/activate?token=' +
+                encodeURIComponent(user.activationToken);
+            options.status = 'You have successfully signed up. ' +
+                'Check your e-mail to activate your account.';
+
+              geddy.mailer.sendMail({
+                from: 'noreply@' + geddy.config.hostname
+              , to: user.email
+              , text: activationUrl
+              }, function (err, data) {
+                if (err) {
+                  throw err;
+                }
+                self.respondWith(user, options);
+              });
+            }
+
+            else {
+              self.respondWith(user);
+            }
+          });
         }
-        user.save(function(err, data) {
+        else {
           self.respondWith(user, {status: err});
-        });
+        }
       }
     });
 
+  };
+
+  this.activate = function (req, res, params) {
+    console.log(params.token);
   };
 
   this.show = function (req, resp, params) {
@@ -97,7 +158,7 @@ var Users = function () {
       }
       else {
         if (params.password) {
-          user.password = cryptPass(user.password);
+          user.password = generateHash(user.password);
         }
 
         user.save(function(err, data) {
