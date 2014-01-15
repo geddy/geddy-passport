@@ -16,6 +16,7 @@ _findOrCreateUser = function (passport, profile, callback) {
       if (!data) {
         userData = strategies[passport.authType].parseProfile(profile);
         user = User.create(userData);
+        user.activatedAt = new Date(); // No e-mail activation required
         // User won't have all required fields, force-save
         user.save({force: true}, function (err, data) {
           if (err) {

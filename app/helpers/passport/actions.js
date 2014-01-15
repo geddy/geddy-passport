@@ -55,43 +55,38 @@ var actions = new (function () {
                   self.redirect(failureRedirect);
                 }
                 else {
-                  try {
-                    user.lookupByPassport(authType, profile, function (err, user) {
-                      var redirect = self.session.get('successRedirect');
-                      if (err) {
-                        self.error(err);
+                  user.lookupByPassport(authType, profile, function (err, user) {
+                    var redirect = self.session.get('successRedirect');
+                    if (err) {
+                      throw err;
+                    }
+                    else {
+                      // If there was a session var for an previous attempt
+                      // to hit an auth-protected page, redirect there, and
+                      // remove the session var so they don't keep going to
+                      // that page for infinity
+                      if (redirect) {
+                        self.session.unset('successRedirect');
                       }
+                      // Otherwise use the default redirect
                       else {
-                        // If there was a session var for an previous attempt
-                        // to hit an auth-protected page, redirect there, and
-                        // remove the session var so they don't keep going to
-                        // that page for infinity
-                        if (redirect) {
-                          self.session.unset('successRedirect');
-                        }
-                        // Otherwise use the default redirect
-                        else {
-                          redirect = successRedirect;
-                        }
-                        // Local account's userId
-                        self.session.set('userId', user.id);
-                        // Third-party auth type, e.g. 'facebook'
-                        self.session.set('authType', authType);
-                        // Third-party auth tokens, may include 'token', 'tokenSecret'
-                        self.session.set('authData', profile.authData);
-
-                        self.redirect(redirect);
+                        redirect = successRedirect;
                       }
-                    });
-                  }
-                  catch (e) {
-                    self.error(e);
-                  }
+                      // Local account's userId
+                      self.session.set('userId', user.id);
+                      // Third-party auth type, e.g. 'facebook'
+                      self.session.set('authType', authType);
+                      // Third-party auth tokens, may include 'token', 'tokenSecret'
+                      self.session.set('authData', profile.authData);
+
+                      self.redirect(redirect);
+                    }
+                  });
                 }
               }
-            , next = function (e) {
-                if (e) {
-                  self.error(e);
+            , next = function (err) {
+                if (err) {
+                  throw err;
                 }
               };
           req.session = this.session.data;
@@ -102,9 +97,10 @@ var actions = new (function () {
   this.local = function (req, resp, params) {
     var self = this
       , username = params.username
-      , password = params.password;
+      , password = params.password
+      , query = {username: {eql: username}, activatedAt: {ne: null}};
 
-    geddy.model.User.first({username: username}, {nocase: ['username']},
+    geddy.model.User.first(query, {nocase: ['username']},
         function (err, user) {
       var crypted
         , redirect;
@@ -139,10 +135,12 @@ var actions = new (function () {
           self.redirect(redirect);
         }
         else {
+          self.flash.error('Could not verify your login information.');
           self.redirect(failureRedirect);
         }
       }
       else {
+        self.flash.error('Could not verify your login information.');
         self.redirect(failureRedirect);
       }
     });

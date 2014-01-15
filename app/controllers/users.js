@@ -48,16 +48,15 @@ var Users = function () {
 
     // Non-blocking uniqueness checks are hard
     geddy.model.User.first({username: user.username}, function(err, data) {
-      var conflictErr
-        , activationUrl;
+      var activationUrl;
       if (err) {
         throw err;
       }
       if (data) {
-        conflictErr = {
+        user.errors  = {
           username: 'This username is already in use.'
         };
-        self.respondWith(user, {status: conflictErr});
+        self.respondWith(user);
       }
       else {
         if (user.isValid()) {
@@ -70,28 +69,44 @@ var Users = function () {
             user.activatedAt = new Date();
           }
           user.save(function(err, data) {
-            var options = {};
+            var options = {}
+              , mailOptions
+              , mailCallback
+              , mailHtml
+              , mailText;
+
             if (err) {
               throw err;
             }
 
             if (EMAIL_ACTIVATION) {
+              activationUrl = geddy.config.fullHostname + '/users/activate?token=' +
+                  encodeURIComponent(user.activationToken);
+              options.status = 'You have successfully signed up. ' +
+                  'Check your e-mail to activate your account.';
 
-            activationUrl = geddy.config.fullHostname + '/users/activate?token=' +
-                encodeURIComponent(user.activationToken);
-            options.status = 'You have successfully signed up. ' +
-                'Check your e-mail to activate your account.';
+              mailHtml = 'Welcome to ' + geddy.config.appName + '. ' +
+                  'Use the following URL to activate your account: ' +
+                  '<a href="' + activationUrl + '">' + activationUrl + '</a>.';
+              mailText = 'Welcome to ' + geddy.config.appName + '. ' +
+                  'Use the following URL to activate your account: ' +
+                  activationUrl + '.';
 
-              geddy.mailer.sendMail({
-                from: 'noreply@' + geddy.config.hostname
-              , to: user.email
-              , text: activationUrl
-              }, function (err, data) {
+              mailOptions = {
+                from: geddy.config.noreplyEmail + '@' + geddy.config.hostname
+              //, to: user.email
+              , to: 'mde@fleegix.org'
+              , subject: 'Welcome to ' + geddy.config.appName
+              , html: mailHtml
+              , text: mailText
+              };
+              mailCallback = function (err, data) {
                 if (err) {
                   throw err;
                 }
                 self.respondWith(user, options);
-              });
+              };
+              geddy.mailer.sendMail(mailOptions, mailCallback);
             }
 
             else {
@@ -108,7 +123,27 @@ var Users = function () {
   };
 
   this.activate = function (req, res, params) {
-    console.log(params.token);
+    var self = this
+      , token = decodeURIComponent(params.token);
+
+    geddy.model.User.first({activationToken: token}, function(err, user) {
+      if (err) {
+        throw err;
+      }
+      if (!user) {
+        throw new geddy.errors.NotFoundError(
+            'Sorry, couldn\'t find the user with that activation code.');
+      }
+      user.activatedAt = new Date();
+      user.save(function (err) {
+        if (err) {
+          throw err;
+        }
+        self.flash.success('Congrats. Your account has been activated. You may now log in.');
+        self.redirect('/login');
+      });
+    });
+
   };
 
   this.show = function (req, resp, params) {
