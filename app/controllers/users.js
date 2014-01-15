@@ -93,9 +93,9 @@ var Users = function () {
                   activationUrl + '.';
 
               mailOptions = {
-                from: geddy.config.noreplyEmail + '@' + geddy.config.hostname
-              //, to: user.email
-              , to: 'mde@fleegix.org'
+                from: geddy.config.mailer.fromAddressUsername + '@' +
+                    geddy.config.hostname
+              , to: user.email
               , subject: 'Welcome to ' + geddy.config.appName
               , html: mailHtml
               , text: mailText

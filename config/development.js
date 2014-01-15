@@ -31,8 +31,12 @@ var config = {
   , expiry: 14 * 24 * 60 * 60
   }
 , mailer: {
-    direct: {
-      debug: true
+    fromAddressUsername: 'noreply'
+  , transport: {
+      type: 'direct'
+    , options: {
+        debug: true
+      }
     }
   }
 };
