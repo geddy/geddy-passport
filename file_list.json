@@ -11,7 +11,7 @@
 , "app/views/main/index.html[.ext]"
 , "app/views/main/login.html[.ext]"
 , "app/views/main/logout.html[.ext]"
-, "app/views/users/_form.html[.ext]"
+, "app/views/users/form.html[.ext]"
 , "app/views/users/add.html[.ext]"
 , "app/views/users/edit.html[.ext]"
 , "app/views/users/index.html[.ext]"
