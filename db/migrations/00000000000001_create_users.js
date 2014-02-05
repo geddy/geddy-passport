@@ -6,6 +6,8 @@ var CreateUsers = function () {
           t.column('familyName', 'string');
           t.column('givenName', 'string');
           t.column('email', 'string');
+          t.column('activationToken', 'string');
+          t.column('activatedAt', 'datetime');
         }
       , callback = function (err, data) {
           if (err) {
