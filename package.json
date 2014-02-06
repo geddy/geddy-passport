@@ -20,7 +20,7 @@
   "main": "./lib/passport",
   "repository": {
     "type": "git",
-    "url": "git://github.com/mde/geddy-passport.git"
+    "url": "git://github.com/geddy/geddy-passport.git"
   },
   "engines": {
     "node": "*"
