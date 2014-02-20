@@ -3,8 +3,7 @@ var passport = require('passport')
   , config = geddy.config.passport
   , successRedirect = config.successRedirect
   , failureRedirect = config.failureRedirect
-  , bcrypt = require('bcrypt')
-  , cryptPass;
+  , bcrypt = require('bcrypt');
 
 var SUPPORTED_SERVICES = [
       'twitter'
@@ -108,11 +107,7 @@ var actions = new (function () {
         self.redirect(failureRedirect);
       }
       if (user) {
-        if (!cryptPass) {
-          cryptPass = require('./index').cryptPass;
-        }
-
-        if (bcrypt.compareSync(password, user.password)) {
+        if (bcrypt.compareSync(password + geddy.config.secret, user.password)) {
           redirect = self.session.get('successRedirect');
 
           // If there was a session var for an previous attempt
