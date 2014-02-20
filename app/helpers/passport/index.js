@@ -23,7 +23,7 @@ exports.generateHash = function (cleartextPass) {
     throw new Error('Need application secret');
   }
 
-  return bcrypt.hashSync(cleartextPass, 10);
+  return bcrypt.hashSync(cleartextPass + geddy.config.secret, 10);
 };
 
 
