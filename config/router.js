@@ -29,6 +29,8 @@ router.get('/auth/facebook').to('Auth.facebook');
 router.get('/auth/facebook/callback').to('Auth.facebookCallback');
 router.get('/auth/yammer').to('Auth.yammer');
 router.get('/auth/yammer/callback').to('Auth.yammerCallback');
+router.get('/auth/google').to('Auth.google');
+router.get('/auth/yammer/callback').to('Auth.googleCallback');
 
 router.get('/users/activate').to('Users.activate');
 router.resource('users');

@@ -9,15 +9,19 @@ var SUPPORTED_SERVICES = [
       'twitter'
     , 'facebook'
     , 'yammer'
+    , 'google'
     ];
 
 SUPPORTED_SERVICES.forEach(function (item) {
-  var hostname = geddy.config.fullHostname || ''
+  // Google uses OAuth2
+  var passportItem = item == 'google' ? 'oauth' : item
+    , passportCtor = passportItem == 'oauth' ? 'OAuth2Strategy' : 'Strategy'
+    , hostname = geddy.config.fullHostname || ''
     , config = {
         callbackURL: hostname + '/auth/' +
             item + '/callback'
       }
-    , Strategy = require('passport-' + item).Strategy
+    , Strategy = require('passport-' + passportItem)[passportCtor]
     , handler = function(token, tokenSecret, profile, done) {
         // Pass along auth data so auth'd users can make
         // API calls to the third-party service
@@ -40,9 +44,14 @@ var actions = new (function () {
 
   var _createInit = function (authType) {
         return function (req, resp, params) {
-          var self = this;
+          var self = this
+            , next = function (err) {
+                if (err) {
+                  throw err;
+                }
+              };
           req.session = this.session.data;
-          passport.authenticate(authType)(req, resp);
+          passport.authenticate(authType)(req, resp, next);
         };
       }
 
@@ -142,8 +151,11 @@ var actions = new (function () {
   };
 
   SUPPORTED_SERVICES.forEach(function (item) {
-    self[item] = _createInit(item);
-    self[item + 'Callback'] = _createCallback(item);
+    // Since google service uses OAuth2Strategy ctor, it identifies
+    // itself internally in Passport as 'oauth2'
+    var passportItem = item == 'google' ? 'oauth2' : item;
+    self[item] = _createInit(passportItem);
+    self[item + 'Callback'] = _createCallback(passportItem);
   });
 
 })();
