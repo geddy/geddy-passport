@@ -1,4 +1,4 @@
-var passport = require('../helpers/passport')
+var passport = require('../../lib/passport')
   , generateHash = passport.generateHash
   , requireAuth = passport.requireAuth;
 
