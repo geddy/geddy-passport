@@ -1,5 +1,5 @@
 
-var p = new jake.NpmPublishTask('geddy-passport', [
+publishTask('geddy-passport', [
   'Jakefile'
 , 'README.md'
 , 'package.json'
