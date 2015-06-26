@@ -17,7 +17,7 @@
     "passport-facebook": "0.1.x",
     "passport-yammer": "0.1.x",
     "passport-oauth": "0.1.x",
-    "bcrypt": "0.7.x",
+    "bcrypt": "0.8.x",
     "nodemailer": "0.6.x"
   },
   "main": "./lib/passport",
