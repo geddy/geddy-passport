@@ -11,7 +11,7 @@
         </ul>
       </div>
       {% endif %}
-      {% set formPath = [process.cwd(), 'app/views/users/_form.html.swig'] %}
+      {% set formPath = [process.cwd(), 'app/views/users/form.html.swig'] %}
       {% set formPath = formPath|join('/') %}
       {% include formPath %}
       <div class="form-actions">

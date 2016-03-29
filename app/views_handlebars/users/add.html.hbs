@@ -11,7 +11,7 @@
           </ul>
         </div>
       {{/if}}
-      {{{ partial '_form' user=params }}}
+      {{{ partial 'form' user=params }}}
       <div class="form-actions">
         {{{ contentTag 'input' 'Add' type='submit' class='btn btn-primary' }}}
       </div>
