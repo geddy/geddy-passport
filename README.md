@@ -1,5 +1,8 @@
 # Geddy-Passport
 
+## DEPRECATION NOTICE
+**Geddy is no longer actively maintained, and therefore it is not recommended to be used for any new projects.**
+
 Geddy provides built-in authentication which integrates with
 [Passport](http://passportjs.org/) to allow auth against either local accounts
 or third-party social services like Facebook and Twitter.
