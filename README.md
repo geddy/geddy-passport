@@ -1,6 +1,4 @@
-Geddy-Passport
-
-* * *
+# Geddy-Passport
 
 Geddy provides built-in authentication which integrates with
 [Passport](http://passportjs.org/) to allow auth against either local accounts
@@ -72,5 +70,3 @@ user's session:
 
  * userId -- the id for the local User account
  * authType -- the method of authentication (e.g., 'local', 'twitter')
-
-
