@@ -7,7 +7,7 @@
           ul
             each err in params.errors
               li=err
-      = partial('_form', {user: user});
+      = partial('form', {user: user});
       .form-actions
         != contentTag('input', 'Save', {type: 'submit', class: 'btn btn-primary'})
         != contentTag('button', 'Remove', {type: 'submit', formaction: userPath(params.id) + '?_method=DELETE', formmethod: 'POST', class: 'btn btn-danger'})

@@ -11,7 +11,7 @@
           </ul>
         </div>
       {{/if}}
-      {{{ partial '_form' user=user }}}
+      {{{ partial 'form' user=user }}}
       <div class="form-actions">
         {{{ contentTag 'input' 'Save' type='submit' class='btn btn-primary' }}}
         <button type="submit" formaction="{{{ userPath params.id }}}?_method=DELETE" formmethod='POST' class='btn btn-danger'>Remove</button>
